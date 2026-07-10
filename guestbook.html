@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>★ Гостевая книга — mypersonalpage.ru ★</title>
+  <meta name="description" content="Гостевая книга на mypersonalpage.ru — оставьте сообщение!">
+  <link rel="stylesheet" href="style.css?v=4">
+</head>
+<body>
+
+  <div class="stars" aria-hidden="true"></div>
+
+  <div class="top-banner">
+  <marquee behavior="scroll" direction="left" scrollamount="4">
+    ★★★ Гостевая книга mypersonalpage.ru ★★★ Оставьте след в истории интернета! ★★★
+  </marquee>
+  </div>
+
+  <table class="layout" cellpadding="0" cellspacing="0" border="0" align="center">
+    <tr>
+      <td class="sidebar-left" valign="top">
+        <div class="box">
+          <div class="box-title">📂 Меню сайта</div>
+          <ul class="nav-links">
+            <li><a href="index.html">🏠 Главная</a></li>
+            <li><a href="blog.html">📝 Блог</a></li>
+            <li><a href="guestbook.html" class="nav-active">📖 Гостевая книга</a></li>
+            <li><a href="index.html#about">👤 Обо мне</a></li>
+            <li><a href="index.html#contact">✉️ Контакт</a></li>
+          </ul>
+        </div>
+
+        <div class="box">
+          <div class="box-title">🌐 Сейчас онлайн</div>
+          <p class="blink">● ONLINE</p>
+          <p class="small">Статус: <span id="status-text">в сети</span></p>
+          <p class="small">Время: <span id="clock">--:--:--</span></p>
+        </div>
+
+        <div class="box">
+          <div class="box-title">🏆 Награды</div>
+          <div class="awards">
+            <div class="award">🥇<br>Лучший<br>сайт<br>2026</div>
+            <div class="award">⭐<br>Top 100<br>RU</div>
+            <div class="award">🎖️<br>Web<br>Master</div>
+          </div>
+        </div>
+
+        <div class="box under-construction">
+          <div class="construction-bar">
+            <span>🚧</span> Скоро: раздел «Фотоальбом» <span>🚧</span>
+          </div>
+        </div>
+      </td>
+
+      <td class="main-content" valign="top">
+        <div class="header">
+          <h1>
+            <span class="rainbow">★ Гостевая книга ★</span>
+          </h1>
+          <p class="subtitle blink-slow">~ Подпишитесь — и вы станете частью истории! ~</p>
+          <hr class="fancy-hr">
+        </div>
+
+        <div class="box">
+          <div class="box-title">✍️ Оставить сообщение</div>
+          <p>Напишите что-нибудь — запись сохранится в базе данных навсегда*!</p>
+          <p class="small">*ну или пока не удалю 😅</p>
+          <form class="guestbook-form" id="guestbook-form">
+            <p><strong>Ваше имя:</strong></p>
+            <input type="text" id="guestbook-name" name="name" placeholder="Введите имя..." maxlength="30" required>
+            <p><strong>Сообщение:</strong></p>
+            <textarea id="guestbook-message" name="message" placeholder="Напишите что-нибудь..." rows="4" maxlength="500" required></textarea>
+            <br>
+            <button type="submit" id="guestbook-submit">📨 Отправить</button>
+            <p id="guestbook-status" class="guestbook-status" aria-live="polite"></p>
+          </form>
+        </div>
+
+        <div class="box" id="guestbook">
+          <div class="box-title">📖 Все записи</div>
+          <div id="guestbook-entries">
+            <p class="small center">Загрузка записей...</p>
+          </div>
+        </div>
+
+        <p class="center">
+          <a href="index.html" class="page-link">🏠 На главную</a>
+        </p>
+      </td>
+
+      <td class="sidebar-right" valign="top">
+        <div class="box">
+          <div class="box-title">📊 Счётчик</div>
+          <div class="hit-counter" id="hit-counter">
+            <span>0</span><span>0</span><span>0</span><span>0</span><span>0</span><span>0</span>
+          </div>
+          <p class="small center">посещений</p>
+        </div>
+
+        <div class="box">
+          <div class="box-title">🎵 Сейчас играет</div>
+          <div class="now-playing">
+            <div class="cd-spin">💿</div>
+            <p><strong>Linkin Park</strong></p>
+            <p class="small">In The End</p>
+            <div class="equalizer" aria-hidden="true">
+              <span></span><span></span><span></span><span></span><span></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="box">
+          <div class="box-title">🎨 Цвет дня</div>
+          <div class="color-of-day" id="color-of-day">
+            <div class="color-swatch"></div>
+            <p class="small center" id="color-name">#FF00FF</p>
+          </div>
+        </div>
+
+        <div class="box">
+          <div class="box-title">📅 Календарь</div>
+          <div class="mini-calendar" id="calendar"></div>
+        </div>
+
+        <div class="box webring">
+          <div class="box-title">🔗 Webring</div>
+          <p class="small center">
+            <a href="#">◀ Пред.</a> |
+            <a href="#">Случайный</a> |
+            <a href="#">След. ▶</a>
+          </p>
+          <p class="small center">Кольцо домашних страниц</p>
+        </div>
+      </td>
+    </tr>
+  </table>
+
+  <div class="footer">
+    <marquee behavior="alternate" scrollamount="2">
+      ★ Спасибо за визит! Заходите ещё! ★ Best viewed at 800×600 ★ Made with ❤️ and Notepad ★
+    </marquee>
+    <p class="footer-text">
+      © 2026 <a href="https://mypersonalpage.ru">mypersonalpage.ru</a> |
+      <a href="index.html">Главная</a> |
+      <a href="blog.html">Блог</a> |
+      <a href="guestbook.html">Гостевая</a> |
+      <span class="blink-slow">★ Under constant improvement ★</span>
+    </p>
+    <p class="footer-badges">
+      <span title="HTML 4.01">HTML</span>
+      <span title="CSS 2.1">CSS</span>
+      <span title="JavaScript 1.5">JS</span>
+      <span title="PHP + MySQL">PHP</span>
+      <span title="Made on Mac">🍎</span>
+      <span title="Valid HTML">✓ W3C</span>
+    </p>
+  </div>
+
+  <script src="common.js?v=4"></script>
+  <script src="guestbook.js?v=4"></script>
+</body>
+</html>

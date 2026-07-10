@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>★ Добро пожаловать на мою домашнюю страницу! ★</title>
+  <meta name="description" content="Личная домашняя страница на mypersonalpage.ru — добро пожаловать!">
+  <link rel="stylesheet" href="style.css?v=4">
+</head>
+<body>
+
+  <!-- Звёздный фон -->
+  <div class="stars" aria-hidden="true"></div>
+
+  <!-- Верхняя плашка -->
+  <div class="top-banner">
+  <marquee behavior="scroll" direction="left" scrollamount="4">
+    ★★★ Добро пожаловать на mypersonalpage.ru! ★★★ Обновлено: 09.07.2026 ★★★
+  </marquee>
+  </div>
+
+  <table class="layout" cellpadding="0" cellspacing="0" border="0" align="center">
+    <tr>
+      <!-- Левая колонка -->
+      <td class="sidebar-left" valign="top">
+        <div class="box">
+          <div class="box-title">📂 Меню сайта</div>
+          <ul class="nav-links">
+            <li><a href="index.html" class="nav-active">🏠 Главная</a></li>
+            <li><a href="blog.html">📝 Блог</a></li>
+            <li><a href="guestbook.html">📖 Гостевая книга</a></li>
+            <li><a href="index.html#about">👤 Обо мне</a></li>
+            <li><a href="index.html#contact">✉️ Контакт</a></li>
+          </ul>
+        </div>
+
+        <div class="box">
+          <div class="box-title">🌐 Сейчас онлайн</div>
+          <p class="blink">● ONLINE</p>
+          <p class="small">Статус: <span id="status-text">в сети</span></p>
+          <p class="small">Время: <span id="clock">--:--:--</span></p>
+        </div>
+
+        <div class="box">
+          <div class="box-title">🏆 Награды</div>
+          <div class="awards">
+            <div class="award">🥇<br>Лучший<br>сайт<br>2026</div>
+            <div class="award">⭐<br>Top 100<br>RU</div>
+            <div class="award">🎖️<br>Web<br>Master</div>
+          </div>
+        </div>
+
+        <div class="box under-construction">
+          <div class="construction-bar">
+            <span>🚧</span> Скоро: раздел «Фотоальбом» <span>🚧</span>
+          </div>
+        </div>
+      </td>
+
+      <!-- Центральная колонка -->
+      <td class="main-content" valign="top">
+        <div class="header">
+          <h1>
+            <span class="rainbow">★ mypersonalpage.ru ★</span>
+          </h1>
+          <p class="subtitle blink-slow">~ Добро пожаловать в мой уголок интернета! ~</p>
+          <hr class="fancy-hr">
+        </div>
+
+        <div class="box" id="about">
+          <div class="box-title">👤 Обо мне</div>
+          <table class="about-table" cellpadding="8">
+            <tr>
+              <td class="avatar-cell" valign="top">
+                <div class="avatar">😎</div>
+                <p class="small center">Это я!</p>
+              </td>
+              <td valign="top">
+                <p>Привет! Меня зовут <strong>Вебмастер</strong>, и это моя личная домашняя страница в самом настоящем стиле <em>old school</em>!</p>
+                <p>Я люблю:</p>
+                <ul>
+                  <li>🌐 Сёрфить по интернету</li>
+                  <li>💻 Писать код на HTML</li>
+                  <li>🎵 Слушать MP3</li>
+                  <li>🎮 Играть в старые игры</li>
+                  <li>📧 Общаться по ICQ и email</li>
+                </ul>
+                <p>Мой девиз: <span class="highlight">«Интернет — это свобода!»</span></p>
+              </td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="box" id="blog-preview">
+          <div class="box-title">📝 Последние записи в блоге</div>
+          <div id="blog-preview-entries">
+            <p class="small center">Загрузка записей...</p>
+          </div>
+          <p class="center">
+            <a href="blog.html" class="page-link">📝 Весь блог →</a>
+          </p>
+        </div>
+
+        <div class="box" id="guestbook-preview">
+          <div class="box-title">📖 Последние записи в гостевой</div>
+          <div id="guestbook-preview-entries">
+            <p class="small center">Загрузка записей...</p>
+          </div>
+          <p class="center">
+            <a href="guestbook.html" class="page-link">📖 Вся гостевая книга →</a>
+          </p>
+        </div>
+
+        <div class="box" id="contact">
+          <div class="box-title">✉️ Связаться со мной</div>
+          <table cellpadding="6">
+            <tr>
+              <td>📧 Email:</td>
+              <td><a href="mailto:hello@mypersonalpage.ru">hello@mypersonalpage.ru</a></td>
+            </tr>
+            <tr>
+              <td>🌐 Сайт:</td>
+              <td><a href="https://mypersonalpage.ru">mypersonalpage.ru</a></td>
+            </tr>
+            <tr>
+              <td>💬 ICQ:</td>
+              <td><span class="highlight">469-838-068</span></td>
+            </tr>
+          </table>
+        </div>
+      </td>
+
+      <!-- Правая колонка -->
+      <td class="sidebar-right" valign="top">
+        <div class="box">
+          <div class="box-title">📊 Счётчик</div>
+          <div class="hit-counter" id="hit-counter">
+            <span>0</span><span>0</span><span>0</span><span>0</span><span>4</span><span>2</span>
+          </div>
+          <p class="small center">посещений</p>
+        </div>
+
+        <div class="box">
+          <div class="box-title">🎵 Сейчас играет</div>
+          <div class="now-playing">
+            <div class="cd-spin">💿</div>
+            <p><strong>Linkin Park</strong></p>
+            <p class="small">In The End</p>
+            <div class="equalizer" aria-hidden="true">
+              <span></span><span></span><span></span><span></span><span></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="box">
+          <div class="box-title">🎨 Цвет дня</div>
+          <div class="color-of-day" id="color-of-day">
+            <div class="color-swatch"></div>
+            <p class="small center" id="color-name">#FF00FF</p>
+          </div>
+        </div>
+
+        <div class="box">
+          <div class="box-title">📅 Календарь</div>
+          <div class="mini-calendar" id="calendar">
+            <!-- заполняется JS -->
+          </div>
+        </div>
+
+        <div class="box webring">
+          <div class="box-title">🔗 Webring</div>
+          <p class="small center">
+            <a href="#">◀ Пред.</a> |
+            <a href="#">Случайный</a> |
+            <a href="#">След. ▶</a>
+          </p>
+          <p class="small center">Кольцо домашних страниц</p>
+        </div>
+      </td>
+    </tr>
+  </table>
+
+  <!-- Нижняя плашка -->
+  <div class="footer">
+    <marquee behavior="alternate" scrollamount="2">
+      ★ Спасибо за визит! Заходите ещё! ★ Best viewed at 800×600 ★ Made with ❤️ and Notepad ★
+    </marquee>
+    <p class="footer-text">
+      © 2026 <a href="https://mypersonalpage.ru">mypersonalpage.ru</a> |
+      Создано с помощью HTML + CSS |
+      <span class="blink-slow">★ Under constant improvement ★</span>
+    </p>
+    <p class="footer-badges">
+      <span title="HTML 4.01">HTML</span>
+      <span title="CSS 2.1">CSS</span>
+      <span title="JavaScript 1.5">JS</span>
+      <span title="PHP + MySQL">PHP</span>
+      <span title="Made on Mac">🍎</span>
+      <span title="Valid HTML">✓ W3C</span>
+    </p>
+  </div>
+
+  <script src="common.js?v=4"></script>
+  <script src="script.js?v=4"></script>
+</body>
+</html>
