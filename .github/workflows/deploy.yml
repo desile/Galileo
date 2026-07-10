@@ -1,0 +1,58 @@
+name: Deploy to FTP
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install lftp
+        run: sudo apt-get update && sudo apt-get install -y lftp
+
+      - name: Create deploy config
+        env:
+          FTP_HOST: ${{ secrets.FTP_HOST }}
+          FTP_USER: ${{ secrets.FTP_USER }}
+          FTP_PASS: ${{ secrets.FTP_PASS }}
+          FTP_PORT: ${{ secrets.FTP_PORT }}
+          FTP_REMOTE_DIR: ${{ secrets.FTP_REMOTE_DIR }}
+          FTP_USE_SSL: ${{ secrets.FTP_USE_SSL }}
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+        run: |
+          cat > .env <<EOF
+          FTP_HOST=${FTP_HOST}
+          FTP_USER=${FTP_USER}
+          FTP_PASS=${FTP_PASS}
+          FTP_PORT=${FTP_PORT:-21}
+          FTP_REMOTE_DIR=${FTP_REMOTE_DIR:-/www/mypersonalpage.ru/}
+          FTP_USE_SSL=${FTP_USE_SSL:-false}
+          EOF
+
+          php -r '
+          $config = [
+              "host"     => getenv("DB_HOST"),
+              "dbname"   => getenv("DB_NAME"),
+              "user"     => getenv("DB_USER"),
+              "password" => getenv("DB_PASSWORD"),
+              "charset"  => "utf8mb4",
+          ];
+          file_put_contents(
+              "db_config.php",
+              "<?php\nreturn " . var_export($config, true) . ";\n"
+          );
+          '
+
+      - name: Deploy via FTP
+        run: chmod +x deploy.sh && ./deploy.sh
