@@ -211,14 +211,12 @@
           ctx.fillStyle = '#ffffff';
           ctx.fillRect(2, -1, len * 0.6, 2);
           ctx.restore();
-          ctx.globalAlpha = 1;
         }
 
         if (fx.type === 'spark' || fx.type === 'debris') {
           var sp = tileToPx(fx.x, fx.y, tile);
           ctx.globalAlpha = 1 - t;
           drawPixelRect(ctx, sp.px - 1, sp.py - 1, 3, 3, fx.color);
-          ctx.globalAlpha = 1;
         }
 
         if (fx.type === 'explosion') {
@@ -234,7 +232,6 @@
           ctx.beginPath();
           ctx.arc(p.px, p.py, r * 0.55, 0, Math.PI * 2);
           ctx.fill();
-          ctx.globalAlpha = 1;
         }
 
         if (fx.type === 'laser') {
@@ -251,7 +248,6 @@
           ctx.strokeStyle = '#ffffff';
           ctx.lineWidth = 1;
           ctx.stroke();
-          ctx.globalAlpha = 1;
         }
 
         if (fx.type === 'death') {
@@ -263,9 +259,9 @@
             var dy = Math.sin(a) * dr;
             drawPixelRect(ctx, p.px + dx - 2, p.py + dy - 2, 4, 4, fx.color);
           }
-          ctx.globalAlpha = 1;
         }
       });
+      ctx.globalAlpha = 1;
     },
 
     drawGhostTower: function (ctx, col, row, tile, def, valid) {

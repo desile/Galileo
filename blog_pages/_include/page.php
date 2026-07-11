@@ -4,7 +4,7 @@ declare(strict_types=1);
 require_once __DIR__ . '/../../lib/blog-post.php';
 
 $root = '../..';
-$assetVersion = '10';
+$assetVersion = '11';
 
 $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
 $callerFile = $trace[1]['file'] ?? $trace[0]['file'] ?? __DIR__;

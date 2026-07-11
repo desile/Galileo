@@ -108,6 +108,7 @@ require_once __DIR__ . '/../_include/page.php';
 
                 <button type="button" id="td-start-wave" class="td-action">⚔️ Начать волну</button>
                 <p id="td-status" class="td-status"></p>
+                <p id="td-error" class="td-hint" style="color:#ff6666"></p>
                 <p class="td-hint">IN — вход врагов, OUT — ваш выход. Не ставьте башни на дорогу!</p>
               </div>
             </div>

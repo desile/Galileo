@@ -34,6 +34,7 @@
     this.waveQueue = [];
     this.waveTimer = 0;
     this.waveActive = false;
+    this.waveEnemiesSpawned = 0;
     this.gameOver = false;
     this.victory = false;
     this.selectedTower = 'basic';
@@ -117,8 +118,16 @@
       this.setStatus('Все волны пройдены!');
       return;
     }
-    this.waveQueue = Enemies.buildWaveQueue(this.wave);
+
+    var queue = Enemies.buildWaveQueue(this.wave);
+    if (!queue.length) {
+      this.setStatus('Ошибка: не удалось загрузить волну ' + (this.wave + 1));
+      return;
+    }
+
+    this.waveQueue = queue;
     this.waveTimer = 0;
+    this.waveEnemiesSpawned = 0;
     this.waveActive = true;
     this.wave++;
     this.setStatus('Волна ' + this.wave + '! Держите оборону!');
@@ -153,6 +162,8 @@
 
   Engine.prototype.isWaveClear = function () {
     if (this.waveQueue.length > 0) return false;
+    if (this.waveEnemiesSpawned === 0) return false;
+
     var anyAlive = false;
     this.enemies.forEach(function (e) {
       if (e.alive && !e.dying) anyAlive = true;
@@ -164,14 +175,20 @@
     if (this.gameOver || this.victory) return;
 
     this.gameTime += dt;
-    Effects.update(this.effects, dt, CONST.TILE);
+
+    if (Effects && Effects.update) {
+      Effects.update(this.effects, dt, CONST.TILE);
+    }
 
     if (this.waveActive) {
       this.waveTimer += dt;
       while (this.waveQueue.length && this.waveQueue[0].delay <= this.waveTimer) {
         var spawn = this.waveQueue.shift();
         var enemy = Enemies.create(spawn.type, spawn.hpScale);
-        if (enemy) this.enemies.push(enemy);
+        if (enemy) {
+          this.enemies.push(enemy);
+          this.waveEnemiesSpawned++;
+        }
       }
       if (this.isWaveClear()) {
         this.waveActive = false;
@@ -200,28 +217,31 @@
       this.updateUI();
     }
 
-    Towers.update(this.towers, this.enemies, this.projectiles, this.effects, dt);
-
-    var self = this;
-    var combat = Projectiles.update(
-      this.projectiles,
-      this.enemies,
-      this.effects,
-      dt,
-      CONST.TILE,
-      function (reward) {
-        self.gold += reward;
-        self.updateUI();
-      }
-    );
-
-    if (combat.kills > 0) this.updateUI();
+    if (Towers && Towers.update && Projectiles) {
+      Towers.update(this.towers, this.enemies, this.projectiles, this.effects, dt);
+      var self = this;
+      Projectiles.update(
+        this.projectiles,
+        this.enemies,
+        this.effects,
+        dt,
+        CONST.TILE,
+        function (reward) {
+          self.gold += reward;
+          self.updateUI();
+        }
+      );
+    }
   };
 
   Engine.prototype.render = function () {
     var ctx = this.ctx;
     var tile = CONST.TILE;
+
+    ctx.save();
+    ctx.globalAlpha = 1;
     ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
     Render.drawMap(ctx, tile, CONST.COLS, CONST.ROWS, Path);
 
     this.towers.forEach(function (tower) {
@@ -245,19 +265,33 @@
       if (enemy.alive) Render.drawEnemy(ctx, enemy, tile);
     });
 
-    this.projectiles.forEach(function (proj) {
-      Render.drawProjectile(ctx, proj, tile);
-    });
+    if (Projectiles) {
+      this.projectiles.forEach(function (proj) {
+        Render.drawProjectile(ctx, proj, tile);
+      });
+    }
 
-    Render.drawEffects(ctx, this.effects, tile);
+    if (Effects && Render.drawEffects) {
+      Render.drawEffects(ctx, this.effects, tile);
+    }
+
+    ctx.restore();
   };
 
   Engine.prototype.loop = function (timestamp) {
     if (!this.lastTime) this.lastTime = timestamp;
     var dt = Math.min(0.05, (timestamp - this.lastTime) / 1000);
     this.lastTime = timestamp;
-    this.tick(dt);
-    this.render();
+
+    try {
+      this.tick(dt);
+      this.render();
+    } catch (err) {
+      this.setStatus('Ошибка игры: ' + err.message);
+      if (this.ui.errorEl) this.ui.errorEl.textContent = err.message;
+      console.error(err);
+    }
+
     this.rafId = requestAnimationFrame(this.loop.bind(this));
   };
 

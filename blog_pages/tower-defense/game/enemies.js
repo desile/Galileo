@@ -110,7 +110,8 @@
     },
 
     buildWaveQueue: function (waveIndex) {
-      var plan = global.TD.WAVE_PLAN[waveIndex];
+      var plans = global.TD.WAVE_PLAN || [];
+      var plan = plans[waveIndex];
       if (!plan) return [];
       var hpScale = 1 + waveIndex * 0.12;
       var queue = [];

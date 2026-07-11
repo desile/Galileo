@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tower Defense — локальный тест</title>
+  <link rel="stylesheet" href="../../style.css?v=local">
+  <link rel="stylesheet" href="game.css?v=local">
+  <style>
+    body { padding: 12px; }
+    .local-banner {
+      background: #000080;
+      color: #fff;
+      padding: 8px;
+      margin-bottom: 12px;
+      font-family: Tahoma, sans-serif;
+      font-size: 12px;
+      text-align: center;
+    }
+    #td-error { color: #ff4444; font-weight: bold; }
+  </style>
+</head>
+<body>
+
+  <div class="local-banner">
+    🧪 Локальный тест — открыто без PHP. Ошибки: <span id="td-error">нет</span>
+  </div>
+
+  <div class="td-wrap">
+    <div class="td-window">
+      <div class="td-titlebar">
+        <span class="td-titlebar-icon">🏰</span>
+        <span>TowerDefense.exe — LOCAL TEST</span>
+      </div>
+      <div class="td-body">
+        <div class="td-toolbar">
+          <span class="td-stat">💰 <span id="td-gold">120</span></span>
+          <span class="td-stat">❤️ <span id="td-lives">12</span></span>
+          <span class="td-stat">🌊 <span id="td-wave">0/10</span></span>
+          <button type="button" id="td-reset" class="td-face" title="Новая игра">🙂</button>
+        </div>
+        <div class="td-canvas-wrap">
+          <canvas id="td-canvas" width="432" height="240"></canvas>
+        </div>
+        <div class="td-panel">
+          <button type="button" class="td-btn" data-tower="basic"><strong>🔫 Пулемёт</strong><small class="td-cost">50💰</small></button>
+          <button type="button" class="td-btn" data-tower="cannon"><strong>💣 Пушка</strong><small class="td-cost">110💰</small></button>
+          <button type="button" class="td-btn" data-tower="laser"><strong>⚡ Лазер</strong><small class="td-cost">180💰</small></button>
+        </div>
+        <button type="button" id="td-start-wave" class="td-action">⚔️ Начать волну</button>
+        <p id="td-status" class="td-status"></p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    window.MPP_ROOT = '../..';
+    window.onerror = function (msg, src, line) {
+      document.getElementById('td-error').textContent = msg + ' (' + src + ':' + line + ')';
+    };
+  </script>
+  <script src="../../common.js?v=local"></script>
+  <script src="game/constants.js?v=local"></script>
+  <script src="game/path.js?v=local"></script>
+  <script src="game/effects.js?v=local"></script>
+  <script src="game/projectiles.js?v=local"></script>
+  <script src="game/render.js?v=local"></script>
+  <script src="game/enemies.js?v=local"></script>
+  <script src="game/towers.js?v=local"></script>
+  <script src="game/engine.js?v=local"></script>
+  <script src="script.js?v=local"></script>
+  <script>
+    (function () {
+      var required = ['CONST', 'Path', 'Effects', 'Projectiles', 'Render', 'Enemies', 'Towers', 'Engine'];
+      var missing = required.filter(function (k) { return !window.TD || !window.TD[k]; });
+      if (missing.length) {
+        document.getElementById('td-error').textContent = 'Не загружены модули: ' + missing.join(', ');
+      }
+    })();
+  </script>
+</body>
+</html>

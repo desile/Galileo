@@ -4,7 +4,29 @@
   'use strict';
 
   var canvas = document.getElementById('td-canvas');
-  if (!canvas || !window.TD || !window.TD.Engine) return;
+  var errorEl = document.getElementById('td-error');
+
+  function showError(msg) {
+    if (errorEl) errorEl.textContent = msg;
+    var status = document.getElementById('td-status');
+    if (status) status.textContent = msg;
+    console.error('[Tower Defense]', msg);
+  }
+
+  if (!canvas) {
+    showError('Canvas #td-canvas не найден');
+    return;
+  }
+
+  var required = ['CONST', 'Path', 'Effects', 'Projectiles', 'Render', 'Enemies', 'Towers', 'Engine'];
+  var missing = required.filter(function (key) {
+    return !window.TD || !window.TD[key];
+  });
+
+  if (missing.length) {
+    showError('Не загружены модули: ' + missing.join(', ') + '. Проверьте game/effects.js и game/projectiles.js');
+    return;
+  }
 
   var tile = window.TD.CONST.TILE;
   var cols = window.TD.CONST.COLS;
@@ -21,6 +43,7 @@
     startWaveBtn: document.getElementById('td-start-wave'),
     resetBtn: document.getElementById('td-reset'),
     towerBtns: Array.prototype.slice.call(document.querySelectorAll('[data-tower]')),
+    errorEl: errorEl,
   };
 
   var engine = new window.TD.Engine(canvas, ui);
