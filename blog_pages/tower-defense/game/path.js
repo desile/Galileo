@@ -97,5 +97,17 @@
         row: Math.floor(y / tile),
       };
     },
+
+    /** Направление движения на пути */
+    directionAt: function (distance) {
+      var p1 = this.positionAt(distance);
+      var p2 = this.positionAt(Math.min(distance + 0.2, this.totalLength - 1));
+      var dx = p2.x - p1.x;
+      var dy = p2.y - p1.y;
+      if (Math.abs(dx) >= Math.abs(dy)) {
+        return dx >= 0 ? 'right' : 'left';
+      }
+      return dy >= 0 ? 'down' : 'up';
+    },
   };
 })(window);

@@ -6,6 +6,7 @@
 
   global.TD = global.TD || {};
   var ENEMY_TYPES = global.TD.ENEMY_TYPES;
+  var Path = global.TD.Path;
 
   function createEnemy(typeId, hpScale) {
     var def = ENEMY_TYPES[typeId];
@@ -18,40 +19,63 @@
       hp: Math.round(def.hp * scale),
       maxHp: Math.round(def.hp * scale),
       distance: 0,
+      prevDistance: 0,
       alive: true,
+      dying: false,
+      deathTimer: 0,
+      walkPhase: Math.random() * Math.PI * 2,
+      hitFlash: 0,
+      facing: 'right',
+      wobble: 0,
     };
   }
 
   global.TD.Enemies = {
     create: createEnemy,
 
-    update: function (enemies, dt) {
+    update: function (enemies, dt, gameTime) {
       var leaked = 0;
       var finished = [];
 
       enemies.forEach(function (enemy) {
         if (!enemy.alive) return;
+
+        if (enemy.dying) {
+          enemy.deathTimer -= dt;
+          enemy.walkPhase += dt * 14;
+          if (enemy.deathTimer <= 0) {
+            enemy.alive = false;
+            enemy.dying = false;
+          }
+          return;
+        }
+
+        enemy.hitFlash = Math.max(0, enemy.hitFlash - dt);
+        enemy.prevDistance = enemy.distance;
         enemy.distance += (enemy.def.speed / global.TD.CONST.TILE) * dt;
-        if (enemy.distance >= global.TD.Path.totalLength - 1) {
+        enemy.walkPhase += dt * (enemy.def.speed / 18);
+        enemy.facing = Path.directionAt(enemy.distance);
+        enemy.wobble = Math.sin(enemy.walkPhase * 2) * 0.06;
+
+        if (enemy.distance >= Path.totalLength - 1) {
           enemy.alive = false;
           leaked++;
           finished.push(enemy.id);
         }
       });
 
-      return { leaked: leaked, finished: finished };
+      return { leaked: leaked, finished: finished, gameTime: gameTime };
     },
 
     findInRange: function (enemies, col, row, rangeTiles) {
-      var tile = global.TD.CONST.TILE;
       var tx = col + 0.5;
       var ty = row + 0.5;
       var best = null;
       var bestDist = -1;
 
       enemies.forEach(function (enemy) {
-        if (!enemy.alive || enemy.hp <= 0) return;
-        var pos = global.TD.Path.positionAt(enemy.distance);
+        if (!enemy.alive || enemy.dying || enemy.hp <= 0) return;
+        var pos = Path.positionAt(enemy.distance);
         var dx = pos.x - tx;
         var dy = pos.y - ty;
         var dist = Math.sqrt(dx * dx + dy * dy);
@@ -69,11 +93,13 @@
       var totalReward = 0;
 
       enemies.forEach(function (enemy) {
-        if (!enemy.alive) return;
+        if (!enemy.alive || enemy.dying) return;
         if (Math.abs(enemy.distance - centerDist) <= radiusTiles) {
+          enemy.hitFlash = 0.18;
           enemy.hp -= damage;
           if (enemy.hp <= 0) {
-            enemy.alive = false;
+            enemy.dying = true;
+            enemy.deathTimer = 0.5;
             killed.push(enemy.id);
             totalReward += enemy.def.reward;
           }

@@ -156,6 +156,8 @@ require_once __DIR__ . '/../_include/page.php';
   <script src="<?= $root ?>/common.js?v=<?= $assetVersion ?>"></script>
   <script src="game/constants.js?v=<?= $assetVersion ?>"></script>
   <script src="game/path.js?v=<?= $assetVersion ?>"></script>
+  <script src="game/effects.js?v=<?= $assetVersion ?>"></script>
+  <script src="game/projectiles.js?v=<?= $assetVersion ?>"></script>
   <script src="game/render.js?v=<?= $assetVersion ?>"></script>
   <script src="game/enemies.js?v=<?= $assetVersion ?>"></script>
   <script src="game/towers.js?v=<?= $assetVersion ?>"></script>

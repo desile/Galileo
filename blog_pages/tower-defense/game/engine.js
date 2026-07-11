@@ -11,6 +11,8 @@
   var Render = global.TD.Render;
   var Enemies = global.TD.Enemies;
   var Towers = global.TD.Towers;
+  var Effects = global.TD.Effects;
+  var Projectiles = global.TD.Projectiles;
   var TOWER_TYPES = global.TD.TOWER_TYPES;
 
   function Engine(canvas, ui) {
@@ -28,6 +30,7 @@
     this.towers = [];
     this.enemies = [];
     this.projectiles = [];
+    this.effects = [];
     this.waveQueue = [];
     this.waveTimer = 0;
     this.waveActive = false;
@@ -37,6 +40,7 @@
     this.hoverCol = -1;
     this.hoverRow = -1;
     this.lastTime = 0;
+    this.gameTime = 0;
     this.rafId = null;
     this.updateUI();
     this.setStatus('Выберите башню и кликните на траву. Затем — «Начать волну».');
@@ -147,8 +151,20 @@
     });
   };
 
+  Engine.prototype.isWaveClear = function () {
+    if (this.waveQueue.length > 0) return false;
+    var anyAlive = false;
+    this.enemies.forEach(function (e) {
+      if (e.alive && !e.dying) anyAlive = true;
+    });
+    return !anyAlive;
+  };
+
   Engine.prototype.tick = function (dt) {
     if (this.gameOver || this.victory) return;
+
+    this.gameTime += dt;
+    Effects.update(this.effects, dt, CONST.TILE);
 
     if (this.waveActive) {
       this.waveTimer += dt;
@@ -157,9 +173,7 @@
         var enemy = Enemies.create(spawn.type, spawn.hpScale);
         if (enemy) this.enemies.push(enemy);
       }
-      if (this.waveQueue.length === 0 && this.enemies.every(function (e) {
-        return !e.alive;
-      })) {
+      if (this.isWaveClear()) {
         this.waveActive = false;
         if (this.wave >= CONST.MAX_WAVES) {
           this.victory = true;
@@ -172,7 +186,7 @@
       }
     }
 
-    var moveResult = Enemies.update(this.enemies, dt);
+    var moveResult = Enemies.update(this.enemies, dt, this.gameTime);
     if (moveResult.leaked > 0) {
       this.lives -= moveResult.leaked;
       if (this.lives <= 0) {
@@ -186,9 +200,21 @@
       this.updateUI();
     }
 
-    var combat = Towers.update(this.towers, this.enemies, this.projectiles, dt);
-    if (combat.reward > 0) this.gold += combat.reward;
-    Towers.updateProjectiles(this.projectiles, dt);
+    Towers.update(this.towers, this.enemies, this.projectiles, this.effects, dt);
+
+    var self = this;
+    var combat = Projectiles.update(
+      this.projectiles,
+      this.enemies,
+      this.effects,
+      dt,
+      CONST.TILE,
+      function (reward) {
+        self.gold += reward;
+        self.updateUI();
+      }
+    );
+
     if (combat.kills > 0) this.updateUI();
   };
 
@@ -199,7 +225,7 @@
     Render.drawMap(ctx, tile, CONST.COLS, CONST.ROWS, Path);
 
     this.towers.forEach(function (tower) {
-      Render.drawTower(ctx, tower, tile, false);
+      Render.drawTower(ctx, tower, tile);
     });
 
     if (this.hoverCol >= 0 && this.hoverRow >= 0 && !this.gameOver && !this.victory) {
@@ -216,17 +242,14 @@
     }
 
     this.enemies.forEach(function (enemy) {
-      if (enemy.alive && enemy.hp > 0) Render.drawEnemy(ctx, enemy, tile);
+      if (enemy.alive) Render.drawEnemy(ctx, enemy, tile);
     });
 
     this.projectiles.forEach(function (proj) {
-      if (proj.splash) {
-        var pos = Path.positionAt(proj.targetDist);
-        Render.drawProjectile(ctx, { x: pos.x, y: pos.y }, tile);
-      } else {
-        Render.drawProjectile(ctx, proj, tile);
-      }
+      Render.drawProjectile(ctx, proj, tile);
     });
+
+    Render.drawEffects(ctx, this.effects, tile);
   };
 
   Engine.prototype.loop = function (timestamp) {
