@@ -40,7 +40,7 @@ require_once __DIR__ . '/../_include/page.php';
         <div class="box">
           <div class="box-title">🌐 Сейчас онлайн</div>
           <p class="blink">● ONLINE</p>
-          <p class="small">Статус: <span id="status-text">в сети</span></p>
+          <p class="small">Статус: <span id="status-text">отправился в паломничество 🙏</span></p>
           <p class="small">Время: <span id="clock">--:--:--</span></p>
         </div>
 
