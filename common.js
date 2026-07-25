@@ -122,9 +122,18 @@
   }
 
   function updateStatus() {
-    const hour = new Date().getHours();
+    const now = new Date();
     const el = document.getElementById('status-text');
     if (!el) return;
+
+    // До 30 июля 2026 (включительно) — в паломничестве
+    const pilgrimageUntil = new Date(2026, 6, 30, 23, 59, 59);
+    if (now <= pilgrimageUntil) {
+      el.textContent = 'отправился в паломничество 🙏';
+      return;
+    }
+
+    const hour = now.getHours();
 
     if (hour >= 0 && hour < 7) {
       el.textContent = 'сплю 😴';
